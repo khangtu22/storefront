@@ -1,54 +1,106 @@
-# Storefront Backend Project
+# Product API
 
-## Getting Started
+## Routes
 
-This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
+- Get all products
+    - URL: `/products`
+    - Method: GET
+    - Description: Retrieves all products.
 
-## Required Technologies
-Your application must make use of the following libraries:
-- Postgres for the database
-- Node/Express for the application logic
-- dotenv from npm for managing environment variables
-- db-migrate from npm for migrations
-- jsonwebtoken from npm for working with JWTs
-- jasmine from npm for testing
+- Get product by ID
+    - URL: `/products/:id`
+    - Method: GET
+    - Description: Retrieves a specific product by ID.
 
-## Steps to Completion
+- Get products by category
+    - URL: `/products/category/:category`
+    - Method: GET
+    - Description: Retrieves products based on a specific category.
 
-### 1. Plan to Meet Requirements
+- Create product
+    - URL: /products
+    - Method: POST
+    - Description: Creates a new product.
 
-In this repo there is a `REQUIREMENTS.md` document which outlines what this API needs to supply for the frontend, as well as the agreed upon data shapes to be passed between front and backend. This is much like a document you might come across in real life when building or extending an API. 
+- Delete product by ID
+    - URL: `/products/:id`
+    - Method: DELETE
+    - Description: Deletes a specific product by ID.
 
-Your first task is to read the requirements and update the document with the following:
-- Determine the RESTful route for each endpoint listed. Add the RESTful route and HTTP verb to the document so that the frontend developer can begin to build their fetch requests.    
-**Example**: A SHOW route: 'blogs/:id' [GET] 
+## Error Handling
 
-- Design the Postgres database tables based off the data shape requirements. Add to the requirements document the database tables and columns being sure to mark foreign keys.   
-**Example**: You can format this however you like but these types of information should be provided
-Table: Books (id:varchar, title:varchar, author:varchar, published_year:varchar, publisher_id:string[foreign key to publishers table], pages:number)
+- Middleware for error handling is included to catch and handle errors.
+- Specific error messages and status codes are returned for different error scenarios.
 
-**NOTE** It is important to remember that there might not be a one to one ratio between data shapes and database tables. Data shapes only outline the structure of objects being passed between frontend and API, the database may need multiple tables to store a single shape. 
+# Order API
 
-### 2.  DB Creation and Migrations
+## Routes
 
-Now that you have the structure of the databse outlined, it is time to create the database and migrations. Add the npm packages dotenv and db-migrate that we used in the course and setup your Postgres database. If you get stuck, you can always revisit the database lesson for a reminder. 
+- Get all orders by user ID
+    - URL: `/orders/:user_id`
+    - Method: GET
+    - Description: Retrieves all orders for a specific user.
 
-You must also ensure that any sensitive information is hashed with bcrypt. If any passwords are found in plain text in your application it will not pass.
+- Get current order by user ID
+    - URL: `/orders/current/:user_id`
+    - Method: GET
+    - Description: Retrieves the current order for a specific user.
 
-### 3. Models
+- Get active orders by user ID
+    - URL: `/orders/active/:user_id`
+    - Method: GET
+    - Description: Retrieves all active orders for a specific user.
 
-Create the models for each database table. The methods in each model should map to the endpoints in `REQUIREMENTS.md`. Remember that these models should all have test suites and mocks.
+- Get completed orders by user ID
+    - URL: `/orders/completed/:user_id`
+    - Method: GET
+    - Description: Retrieves all completed orders for a specific user.
 
-### 4. Express Handlers
+- Update order status
+    - URL: `/orders`
+    - Method: PUT
+    - Description: Updates the status of an order.
 
-Set up the Express handlers to route incoming requests to the correct model method. Make sure that the endpoints you create match up with the enpoints listed in `REQUIREMENTS.md`. Endpoints must have tests and be CORS enabled. 
+- Delete order by ID
+    - URL: `/orders/:id`
+    - Method: DELETE
+    - Description: Deletes a specific order by ID.
 
-### 5. JWTs
+- Create order
+    - URL: `/orders`
+    - Method: POST
+    - Description: Creates a new order.
 
-Add JWT functionality as shown in the course. Make sure that JWTs are required for the routes listed in `REQUIUREMENTS.md`.
+## Error Handling
 
-### 6. QA and `README.md`
+- Error handling middleware is included to catch and handle errors.
+- Specific error messages and status codes are returned for different error scenarios.
 
-Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database. 
+# User API
 
-Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+## Routes
+
+- Get all users
+    - URL: `/users`
+    - Method: GET
+    - Description: Retrieves all users.
+
+- Get user by ID
+    - URL: `/users/:id`
+    - Method: GET
+    - Description: Retrieves a specific user by their ID.
+
+- Create user
+    - URL: `/users`
+    - Method: POST
+    - Description: Creates a new user.
+
+- Delete user by ID
+    - URL: `/users/:id`
+    - Method: DELETE
+    - Description: Deletes a specific user by their ID.
+
+## Error Handling
+
+- Error handling middleware is included to catch and handle errors.
+- Specific error messages and status codes are returned for different error scenarios.
