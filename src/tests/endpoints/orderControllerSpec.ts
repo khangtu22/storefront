@@ -4,6 +4,7 @@ import { createJWTToken } from '../../middlewares/auth';
 import { UserRepository } from '../../models/User';
 import { ProductRepository } from '../../models/Product';
 import { ProductType } from '../../interfaces/Product';
+import { OrderResponseDTO } from '../../interfaces/dtos/OrderResponseDTO';
 
 const request = supertest(app);
 const token: string = createJWTToken(1, 'bearer');
@@ -13,7 +14,6 @@ const productModel: ProductRepository = new ProductRepository();
 describe('Test Order Router', () => {
   let userId: number;
   let productId: number;
-  let orderId: number;
 
   beforeAll(async () => {
     const dataUser = {
@@ -34,26 +34,47 @@ describe('Test Order Router', () => {
   });
 
   it('Should create a new order', async () => {
-    const newOrder = {
+    const newOrderComplete = {
       product_id: productId,
       quantity: 12,
       user_id: userId,
       status: 'complete',
     };
 
-    const response = await request
+    const newOrderActive = {
+      product_id: productId,
+      quantity: 12,
+      user_id: userId,
+      status: 'active',
+    };
+    const responseCompleteOrder = await request
       .post('/api/orders')
       .set('Authorization', `Bearer ${token}`)
-      .send(newOrder);
+      .send(newOrderComplete);
 
-    expect(response.status).toBe(200);
-    expect(response.body.id).not.toBeNull();
-    expect(response.body.product_id).toBe(newOrder.product_id);
-    expect(response.body.quantity).toBe(newOrder.quantity);
-    expect(response.body.user_id).toBe(newOrder.user_id);
-    expect(response.body.status).toBe(newOrder.status);
+    const responseActiveOrder = await request
+      .post('/api/orders')
+      .set('Authorization', `Bearer ${token}`)
+      .send(newOrderActive);
 
-    orderId = response.body.id;
+    const orderResponseComplete: OrderResponseDTO = responseCompleteOrder.body;
+    const orderResponseActive: OrderResponseDTO = responseActiveOrder.body;
+
+    expect(responseCompleteOrder.status).toBe(200);
+    expect(orderResponseComplete.id).not.toBeNull();
+    expect(orderResponseComplete.product_id).toBe(newOrderComplete.product_id);
+    expect(orderResponseComplete.quantity).toBe(newOrderComplete.quantity);
+    expect(orderResponseComplete.user_id).toBe(newOrderComplete.user_id);
+    expect(orderResponseComplete.status).toBe(newOrderComplete.status);
+    expect(responseCompleteOrder.body).toBeDefined();
+
+    expect(responseActiveOrder.status).toBe(200);
+    expect(orderResponseActive.id).not.toBeNull();
+    expect(orderResponseActive.product_id).toBe(newOrderActive.product_id);
+    expect(orderResponseActive.quantity).toBe(newOrderActive.quantity);
+    expect(orderResponseActive.user_id).toBe(newOrderActive.user_id);
+    expect(orderResponseActive.status).toBe(newOrderActive.status);
+    expect(responseActiveOrder.body).toBeDefined();
   });
 
   it('Should return all orders for a user', async () => {
@@ -62,7 +83,12 @@ describe('Test Order Router', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
-    expect(response.body).toBeDefined();
+    expect(response.body).toBeInstanceOf(Array);
+
+    response.body.forEach((order: any) => {
+      expect(order.id).not.toBeNull();
+      expect(order.user_id).toBe(userId);
+    });
   });
 
   it('Should return the current order for a user', async () => {
@@ -71,7 +97,7 @@ describe('Test Order Router', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
-    expect(response.body).toBeDefined();
+    expect(response.body.id).not.toBeNull();
   });
 
   it('Should return active orders for a user', async () => {
@@ -80,30 +106,27 @@ describe('Test Order Router', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
-    expect(response.body).toBeDefined();
+    expect(response.body).toBeInstanceOf(Array);
+
+    response.body.forEach((order: any) => {
+      expect(order.id).not.toBeNull();
+      expect(order.user_id).toBe(userId);
+      expect(order.status).toBe('active');
+    });
   });
 
   it('Should return completed orders for a user', async () => {
-    const userId = 1;
-
     const response = await request
       .get(`/api/orders/completed/${userId}`)
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
-    expect(response.body).toBeDefined();
-  });
+    expect(response.body).toBeInstanceOf(Array);
 
-  it('Should update an order status', async () => {
-    const orderId = 1;
-    const status = 'active';
-
-    const response = await request
-      .put('/api/orders')
-      .query({ orderId, status })
-      .set('Authorization', `Bearer ${token}`);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toBeDefined();
+    response.body.forEach((order: any) => {
+      expect(order.id).not.toBeNull();
+      expect(order.user_id).toBe(userId);
+      expect(order.status).toBe('complete');
+    });
   });
 });

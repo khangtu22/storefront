@@ -14,8 +14,8 @@ export const authToken = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const tokenSecret: string = process.env.JWT_SECRET as string
+const tokenSecret: string = process.env.JWT_SECRET as string;
 
 export const createJWTToken = (id: number, username: string): string => {
-  return jwt.sign({ id, username }, tokenSecret)
-}
+  return jwt.sign({ id, username }, tokenSecret);
+};

@@ -1,5 +1,5 @@
 export interface UserCreatedResponseDTO {
-  id: number,
+  id: number;
   auth: boolean;
   token: string;
 }

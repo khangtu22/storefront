@@ -89,7 +89,6 @@ export class OrderRepository {
   public async createOrder(order: OrderType): Promise<OrderResponseDTO> {
     try {
       const { product_id, quantity, user_id, status } = order;
-      console.log(order);
 
       const conn = await pool.connect();
       const sql = `INSERT INTO ${this.tableName} (product_id, quantity, user_id, status)

@@ -45,7 +45,6 @@ describe('Test Products Controller', function () {
     expect(getProductResponse.body).toEqual(response.body);
   });
 
-
   it('Should return 500 due to lack of JWT token', async function () {
     const data = {
       name: 'Test B',
@@ -53,10 +52,7 @@ describe('Test Products Controller', function () {
       category: 'category B',
     };
 
-    const response = await request
-        .post('/api/products')
-        .send(data)
-        .expect(500);
+    await request.post('/api/products').send(data).expect(500);
   });
 
   it('Should return products by category GET: /api/products/category/:category', async function () {

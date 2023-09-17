@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { PoolClient, QueryResult } from 'pg';
 import { UserType } from '../interfaces/User';
 import pool from '../database';
-import { generateToken } from '../utils/utils';
+import { generateToken } from '../utils/generateToken';
 import { UserResponseDTO } from '../interfaces/dtos/UserResponseDTO';
 import { UserCreatedResponseDTO } from '../interfaces/dtos/UserCreatedResponseDTO';
 

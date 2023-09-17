@@ -18,7 +18,7 @@
     - Description: Retrieves products based on a specific category.
 
 - Create product
-    - URL: /products
+    - URL: `/products`
     - Method: POST
     - Description: Creates a new product.
 

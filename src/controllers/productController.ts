@@ -90,12 +90,10 @@ productRouter.delete(
   },
 );
 
-productRouter.use(
-  (err: Error, req: Request, res: Response) => {
-    const statusCode = err instanceof CustomError ? err.statusCode : 500;
-    const message = err.message || 'Internal Server Error';
-    res.status(statusCode).json({ error: message });
-  },
-);
+productRouter.use((err: Error, req: Request, res: Response) => {
+  const statusCode = err instanceof CustomError ? err.statusCode : 500;
+  const message = err.message || 'Internal Server Error';
+  res.status(statusCode).json({ error: message });
+});
 
 export default productRouter;
