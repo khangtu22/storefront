@@ -1,6 +1,5 @@
 import { Request, Response, Router } from 'express';
 import { OrderRepository } from '../models/Order';
-import { OrderType } from '../interfaces/Order';
 import { authToken } from '../middlewares/auth';
 import { OrderResponseDTO } from '../interfaces/dtos/OrderResponseDTO';
 
@@ -94,7 +93,7 @@ orderRouter.delete('/:id', authToken, async (req: Request, res: Response) => {
 
 orderRouter.post('/', authToken, async (req: Request, res: Response) => {
   try {
-    const newOrder: OrderType = await orderModel.createOrder(req.body);
+    const newOrder: OrderResponseDTO = await orderModel.createOrder(req.body);
     return res.json(newOrder);
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error' });

@@ -5,6 +5,7 @@ import { UserRepository } from '../../models/User';
 import { ProductRepository } from '../../models/Product';
 import { ProductType } from '../../interfaces/Product';
 import { OrderResponseDTO } from '../../interfaces/dtos/OrderResponseDTO';
+import { OrderType } from '../../interfaces/Order';
 
 const request = supertest(app);
 const token: string = createJWTToken(1, 'bearer');
@@ -14,6 +15,7 @@ const productModel: ProductRepository = new ProductRepository();
 describe('Test Order Router', () => {
   let userId: number;
   let productId: number;
+  let productId2: number;
 
   beforeAll(async () => {
     const dataUser = {
@@ -21,60 +23,53 @@ describe('Test Order Router', () => {
       lastname: 'TestLastName',
       password: 'TestPassword',
     };
-    const dataProduct: ProductType = {
-      name: 'Test',
+    const dataProduct1: ProductType = {
+      name: 'Test 1',
       price: '40',
       category: 'category a',
     };
+
+    const dataProduct2: ProductType = {
+      name: 'Test 2',
+      price: '20',
+      category: 'category b',
+    };
     const user = await userModel.createUser(dataUser);
-    const product = await productModel.createProduct(dataProduct);
+    const product1 = await productModel.createProduct(dataProduct1);
+    const product2 = await productModel.createProduct(dataProduct2);
 
     userId = user.id;
-    productId = product.id;
+    productId = product1.id;
+    productId2 = product2.id;
   });
 
   it('Should create a new order', async () => {
-    const newOrderComplete = {
+    const newOrderProductType1 = {
       product_id: productId,
-      quantity: 12,
-      user_id: userId,
-      status: 'complete',
+      quantity: 10,
     };
-
-    const newOrderActive = {
-      product_id: productId,
-      quantity: 12,
+    const newOrderProductType2 = {
+      product_id: productId2,
+      quantity: 20,
+    };
+    const newOrderActive: OrderType = {
       user_id: userId,
       status: 'active',
+      orderProducts: [newOrderProductType1, newOrderProductType2],
     };
-    const responseCompleteOrder = await request
-      .post('/api/orders')
-      .set('Authorization', `Bearer ${token}`)
-      .send(newOrderComplete);
 
     const responseActiveOrder = await request
       .post('/api/orders')
       .set('Authorization', `Bearer ${token}`)
       .send(newOrderActive);
 
-    const orderResponseComplete: OrderResponseDTO = responseCompleteOrder.body;
     const orderResponseActive: OrderResponseDTO = responseActiveOrder.body;
-
-    expect(responseCompleteOrder.status).toBe(200);
-    expect(orderResponseComplete.id).not.toBeNull();
-    expect(orderResponseComplete.product_id).toBe(newOrderComplete.product_id);
-    expect(orderResponseComplete.quantity).toBe(newOrderComplete.quantity);
-    expect(orderResponseComplete.user_id).toBe(newOrderComplete.user_id);
-    expect(orderResponseComplete.status).toBe(newOrderComplete.status);
-    expect(responseCompleteOrder.body).toBeDefined();
 
     expect(responseActiveOrder.status).toBe(200);
     expect(orderResponseActive.id).not.toBeNull();
-    expect(orderResponseActive.product_id).toBe(newOrderActive.product_id);
-    expect(orderResponseActive.quantity).toBe(newOrderActive.quantity);
     expect(orderResponseActive.user_id).toBe(newOrderActive.user_id);
     expect(orderResponseActive.status).toBe(newOrderActive.status);
-    expect(responseActiveOrder.body).toBeDefined();
+    expect(orderResponseActive.orderProducts).toBeInstanceOf(Array);
   });
 
   it('Should return all orders for a user', async () => {

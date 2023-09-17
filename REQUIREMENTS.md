@@ -52,12 +52,22 @@
     - URL: `/api/orders/active/:user_id`
     - Method: GET
     - Description: Retrieves all active orders for a specific user.
+```agsl
+curl --location --request GET 'http://localhost:3000/api/orders/active/2' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.KWzNnr0CSmbqiqTsJp6Mm598PA4YSGklc8kZWh2Y44I' \
+```
 
 - Get completed orders by user ID
     - URL: `/api/orders/completed/:user_id`
     - Method: GET
     - Description: Retrieves all completed orders for a specific user.
 
+```agsl
+curl --location --request GET 'http://localhost:3000/api/orders/completed/2' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.KWzNnr0CSmbqiqTsJp6Mm598PA4YSGklc8kZWh2Y44I' \
+```
 - Update order status
     - URL: `/api/orders`
     - Method: PUT
@@ -72,7 +82,45 @@
     - URL: `/api/orders`
     - Method: POST
     - Description: Creates a new order.
+    - Request data example:
+```agsl
+  {
+      "user_id": 1,
+      "status": "complete",
+      "orderProducts": [
+          {
+            "product_id": 1,
+            "quantity": 12
+          },
+          {
+            "product_id": 2,
+            "quantity": 22
+          }
+      ]
+    }
+```
 
+Example create order:
+```agsl
+curl --location 'http://localhost:3000/api/orders' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.MTQ.KWzNnr0CSmbqiqTsJp6Mm598PA4YSGklc8kZWh2Y44I' \
+--data '  {
+
+      "user_id": 1,
+      "status": "complete",
+      "orderProducts": [
+          {
+            "product_id": 1,
+            "quantity": 12
+          },
+          {
+            "product_id": 2,
+            "quantity": 22
+          }
+      ]
+    }'
+```
 ## Error Handling
 
 - Error handling middleware is included to catch and handle errors.
