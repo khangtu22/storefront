@@ -137,3 +137,5 @@ back-end/build
 build
 
 migrations
+
+database.json

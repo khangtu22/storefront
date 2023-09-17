@@ -1,42 +1,108 @@
-# API Requirements
-The company stakeholders want to create an online storefront to showcase their great product ideas. Users need to be able to browse an index of all products, see the specifics of a single product, and add products to an order that they can view in a cart page. You have been tasked with building the API that will support this application, and your coworker is building the frontend.
 
-These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
 
-## API Endpoints
-#### Products
-- Index 
-- Show
-- Create [token required]
-- [OPTIONAL] Top 5 most popular products 
-- [OPTIONAL] Products by category (args: product category)
+# Product API
 
-#### Users
-- Index [token required]
-- Show [token required]
-- Create N[token required]
+## Routes
 
-#### Orders
-- Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
+- Get all products
+    - URL: `/api/products`
+    - Method: GET
+    - Description: Retrieves all products.
 
-## Data Shapes
-#### Product
--  id
-- name
-- price
-- [OPTIONAL] category
+- Get product by ID
+    - URL: `/api/products/:id`
+    - Method: GET
+    - Description: Retrieves a specific product by ID.
 
-#### User
-- id
-- firstName
-- lastName
-- password
+- Get products by category
+    - URL: `/api/products/category/:category`
+    - Method: GET
+    - Description: Retrieves products based on a specific category.
 
-#### Orders
-- id
-- id of each product in the order
-- quantity of each product in the order
-- user_id
-- status of order (active or complete)
+- Create product
+    - URL: `/api/products`
+    - Method: POST
+    - Description: Creates a new product.
 
+- Delete product by ID
+    - URL: `/api/products/:id`
+    - Method: DELETE
+    - Description: Deletes a specific product by ID.
+
+## Error Handling
+
+- Middleware for error handling is included to catch and handle errors.
+- Specific error messages and status codes are returned for different error scenarios.
+
+# Order API
+
+## Routes
+
+- Get all orders by user ID
+    - URL: `/api/orders/:user_id`
+    - Method: GET
+    - Description: Retrieves all orders for a specific user.
+
+- Get current order by user ID
+    - URL: `/api/orders/current/:user_id`
+    - Method: GET
+    - Description: Retrieves the current order for a specific user.
+
+- Get active orders by user ID
+    - URL: `/api/orders/active/:user_id`
+    - Method: GET
+    - Description: Retrieves all active orders for a specific user.
+
+- Get completed orders by user ID
+    - URL: `/api/orders/completed/:user_id`
+    - Method: GET
+    - Description: Retrieves all completed orders for a specific user.
+
+- Update order status
+    - URL: `/api/orders`
+    - Method: PUT
+    - Description: Updates the status of an order.
+
+- Delete order by ID
+    - URL: `/api/orders/:id`
+    - Method: DELETE
+    - Description: Deletes a specific order by ID.
+
+- Create order
+    - URL: `/api/orders`
+    - Method: POST
+    - Description: Creates a new order.
+
+## Error Handling
+
+- Error handling middleware is included to catch and handle errors.
+- Specific error messages and status codes are returned for different error scenarios.
+
+# User API
+
+## Routes
+
+- Get all users
+    - URL: `/api/users`
+    - Method: GET
+    - Description: Retrieves all users.
+
+- Get user by ID
+    - URL: `/api/users/:id`
+    - Method: GET
+    - Description: Retrieves a specific user by their ID.
+
+- Create user
+    - URL: `/api/users`
+    - Method: POST
+    - Description: Creates a new user.
+
+- Delete user by ID
+    - URL: `/api/users/:id`
+    - Method: DELETE
+    - Description: Deletes a specific user by their ID.
+
+## Error Handling
+
+- Error handling middleware is included to catch and handle errors.
+- Specific error messages and status codes are returned for different error scenarios.

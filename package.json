@@ -11,6 +11,7 @@
     "test": "npm run build && npm run jasmine",
     "lint": "npx eslint .",
     "format:fix": "prettier --write \"src/**/*.ts\"",
+    "prettier": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "test:test": "ENV=test && npx tsc && db-migrate --env test up && jasmine && db-migrate db:drop test"
   },
   "keywords": [],
@@ -27,6 +28,10 @@
     "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.0",
+    "@types/cors": "^2.8.14",
+    "@types/db-migrate-pg": "^0.0.10",
+    "@types/jasmine": "^4.3.6",
+    "@types/pg": "^8.10.2",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "eslint": "^8.49.0",
@@ -42,10 +47,6 @@
     "winston": "^3.10.0"
   },
   "dependencies": {
-    "@types/cors": "^2.8.14",
-    "@types/db-migrate-pg": "^0.0.10",
-    "@types/jasmine": "^4.3.6",
-    "@types/pg": "^8.10.2",
     "body-parser": "^1.20.2",
     "db-migrate-pg": "^1.5.0",
     "dotenv": "^16.3.1",

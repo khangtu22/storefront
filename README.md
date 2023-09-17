@@ -1,106 +1,144 @@
-# Product API
+# Storefront Git Readme
 
-## Routes
+This readme provides guidelines and best practices for setting up and running the Storefront application. Please follow the instructions below to ensure a smooth setup and deployment.
 
-- Get all products
-    - URL: `/products`
-    - Method: GET
-    - Description: Retrieves all products.
+## Database Setup
 
-- Get product by ID
-    - URL: `/products/:id`
-    - Method: GET
-    - Description: Retrieves a specific product by ID.
+To set up the database for the Storefront application, follow these steps:
 
-- Get products by category
-    - URL: `/products/category/:category`
-    - Method: GET
-    - Description: Retrieves products based on a specific category.
+1. Create a new user for the database with the following command:
+   ````sql
+   CREATE USER storefront_user WITH PASSWORD 'storefront_user_password';
+   ````
 
-- Create product
-    - URL: `/products`
-    - Method: POST
-    - Description: Creates a new product.
+2. Create the main database for the application:
+   ````sql
+   CREATE DATABASE storefront;
+   ````
 
-- Delete product by ID
-    - URL: `/products/:id`
-    - Method: DELETE
-    - Description: Deletes a specific product by ID.
+3. Connect to the storefront database:
+   ````sql
+   \c storefront;
+   ````
 
-## Error Handling
+4. Grant all privileges on the storefront database to the storefront user:
+   ````sql
+   GRANT ALL PRIVILEGES ON DATABASE storefront TO storefront_user;
+   ````
 
-- Middleware for error handling is included to catch and handle errors.
-- Specific error messages and status codes are returned for different error scenarios.
+5. Create a separate test database for running tests:
+   ````sql
+   CREATE DATABASE storefront_test;
+   ````
 
-# Order API
+6. Connect to the storefront_test database:
+   ````sql
+   \c storefront_test;
+   ````
 
-## Routes
+7. Grant all privileges on the storefront_test database to the storefront user:
+   ````sql
+   GRANT ALL PRIVILEGES ON DATABASE storefront_test TO storefront_user;
+   ````
 
-- Get all orders by user ID
-    - URL: `/orders/:user_id`
-    - Method: GET
-    - Description: Retrieves all orders for a specific user.
+## Environment Variables
 
-- Get current order by user ID
-    - URL: `/orders/current/:user_id`
-    - Method: GET
-    - Description: Retrieves the current order for a specific user.
+Create a `.env` file in the root directory of the application and populate it with the following environment variables:
 
-- Get active orders by user ID
-    - URL: `/orders/active/:user_id`
-    - Method: GET
-    - Description: Retrieves all active orders for a specific user.
+```plaintext
+POSTGRES_HOST=localhost
+POSTGRES_DB=storefront
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_TEST_DB=storefront_test
 
-- Get completed orders by user ID
-    - URL: `/orders/completed/:user_id`
-    - Method: GET
-    - Description: Retrieves all completed orders for a specific user.
+ENV=dev
 
-- Update order status
-    - URL: `/orders`
-    - Method: PUT
-    - Description: Updates the status of an order.
+SALT_ROUNDS=10
+BCRYPT_PASSWORD=random_password
+JWT_SECRET=410b5c68ebf185103713fb38e00fba91db8dcf26885c5a21d61db9865df886d5
+```
 
-- Delete order by ID
-    - URL: `/orders/:id`
-    - Method: DELETE
-    - Description: Deletes a specific order by ID.
+Make sure to replace the values with appropriate configurations for your environment.
 
-- Create order
-    - URL: `/orders`
-    - Method: POST
-    - Description: Creates a new order.
+## Creating the Product Table
 
-## Error Handling
+To create the `products` table in the database, execute the following SQL command:
 
-- Error handling middleware is included to catch and handle errors.
-- Specific error messages and status codes are returned for different error scenarios.
+```sql
+CREATE TABLE products(
+                       id SERIAL PRIMARY KEY,
+                       name VARCHAR(50) NOT NULL,
+                       price NUMERIC NOT NULL,
+                       category VARCHAR(50)
+);
+```
 
-# User API
+## Creating the Users Table
 
-## Routes
+To create the `users` table in the database, execute the following SQL command:
 
-- Get all users
-    - URL: `/users`
-    - Method: GET
-    - Description: Retrieves all users.
+```sql
+CREATE TABLE users(
+                    id SERIAL PRIMARY KEY,
+                    firstName VARCHAR(50) NOT NULL,
+                    lastName VARCHAR(50) NOT NULL,
+                    password VARCHAR(60) NOT NULL
+);
+```
 
-- Get user by ID
-    - URL: `/users/:id`
-    - Method: GET
-    - Description: Retrieves a specific user by their ID.
+## Creating the Orders Table
 
-- Create user
-    - URL: `/users`
-    - Method: POST
-    - Description: Creates a new user.
+To create the `orders` table in the database, execute the following SQL commands:
 
-- Delete user by ID
-    - URL: `/users/:id`
-    - Method: DELETE
-    - Description: Deletes a specific user by their ID.
+```sql
+CREATE TYPE status AS ENUM ('active', 'complete');
 
-## Error Handling
+CREATE TABLE orders
+(
+  id         SERIAL PRIMARY KEY,
+  product_id INTEGER,
+  quantity   INTEGER DEFAULT 1,
+  user_id    INTEGER,
+  status     status NOT NULL,
 
-- Error handling middleware is included to catch and handle errors.
-- Specific error messages and status codes are returned for different error scenarios.
+  FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+```
+
+## Running the Application
+
+To run the Storefront application, follow these steps:
+
+1. Install the required dependencies:
+   ````
+   npm install
+   ````
+
+2. Build the application:
+   ````
+   npm run build
+   ````
+
+3. Run linting:
+   ````
+   npm run lint
+   ````
+
+4. Run prettify:
+   ````
+   npm run prettify
+   ````
+
+5. Run tests:
+   ````
+   npm run test
+   ````
+
+6. Start the backend server:
+   ````
+   npm run start
+   ````
+
+This will run the Node server on port 3000.
