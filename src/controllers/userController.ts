@@ -28,9 +28,11 @@ userRouter.get('/:id', authToken, async (req: Request, res: Response) => {
 
 userRouter.post('/', authToken, async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
     const newUser: UserCreatedResponseDTO = await userModel.createUser(
       req.body,
     );
+    console.log(newUser);
     return res.json(newUser);
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error' });

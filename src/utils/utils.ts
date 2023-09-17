@@ -1,4 +1,4 @@
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
 
 export const generateToken = (id: number): string => {
   const jwtSecret = process.env.JWT_SECRET;
@@ -7,9 +7,5 @@ export const generateToken = (id: number): string => {
     throw new Error('JWT_SECRET environment variable is not set.');
   }
 
-  const signOptions: SignOptions = {
-    expiresIn: '1h',
-  };
-
-  return jwt.sign(id.toString(), jwtSecret, signOptions);
+  return jsonwebtoken.sign(id.toString(), jwtSecret as string);
 };

@@ -61,6 +61,7 @@ export class UserRepository {
       const id: number = result.rows[0].id;
       const token: string = generateToken(id);
       return {
+        id: id,
         auth: true,
         token,
       };
