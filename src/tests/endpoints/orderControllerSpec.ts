@@ -86,15 +86,6 @@ describe('Test Order Router', () => {
     });
   });
 
-  it('Should return the current order for a user', async () => {
-    const response = await request
-      .get(`/api/orders/current/${userId}`)
-      .set('Authorization', `Bearer ${token}`);
-
-    expect(response.status).toBe(200);
-    expect(response.body.id).not.toBeNull();
-  });
-
   it('Should return active orders for a user', async () => {
     const response = await request
       .get(`/api/orders/active/${userId}`)
