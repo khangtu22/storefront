@@ -141,4 +141,4 @@ To run the Storefront application, follow these steps:
    npm run start
    ````
 
-This will run the Node server on port 3000.
+This will run the Node server on port 3000, and the database will be accessible on port 5432.

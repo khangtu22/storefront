@@ -1,4 +1,74 @@
+# Database Schema
 
+The following table illustrates the database schema used in the project:
+
+### Users Table
+
+| Column     | Data Type   | Constraints |
+|------------|-------------|-------------|
+| id         | SERIAL      | PRIMARY KEY |
+| firstName  | VARCHAR(50) | NOT NULL    |
+| lastName   | VARCHAR(50) | NOT NULL    |
+| password   | VARCHAR(60) | NOT NULL    |
+
+### Products Table
+
+| Column   | Data Type   | Constraints |
+|----------|-------------|-------------|
+| id       | SERIAL      | PRIMARY KEY |
+| name     | VARCHAR(50) | NOT NULL    |
+| price    | NUMERIC     | NOT NULL    |
+| category | VARCHAR(50) |             |
+
+### Orders Table
+
+| Column   | Data Type | Constraints                                      |
+|----------|-----------|--------------------------------------------------|
+| id       | SERIAL    | PRIMARY KEY                                      |
+| user_id  | INTEGER   |                                                  |
+| status   | status    | NOT NULL                                         |
+| user_id  | INTEGER   | FOREIGN KEY (user_id) REFERENCES users (id)      |
+
+### Order Products Table
+
+| Column     | Data Type | Constraints                                                |
+|------------|-----------|------------------------------------------------------------|
+| id         | SERIAL    | PRIMARY KEY                                                |
+| order_id   | INTEGER   |                                                            |
+| product_id | INTEGER   |                                                            |
+| quantity   | INTEGER   | DEFAULT 1                                                  |
+| order_id   | INTEGER   | FOREIGN KEY (order_id) REFERENCES orders (id)              |
+| product_id | INTEGER   | FOREIGN KEY (product_id) REFERENCES products (id)          |
+
+# Diagram
+
+![img.png](img.png)
+
+
+# Describe
+
+#### users
+- id (PRIMARY KEY): Unique identifier for each user
+- firstName: User's first name
+- lastName: User's last name
+- password: User's password
+
+#### products
+- id (PRIMARY KEY): Unique identifier for each product
+- name: Product name
+- price: Product price
+- category: Product category
+
+#### orders
+- id (PRIMARY KEY): Unique order ID
+- user_id: ForeignKey linking order to its owning user
+- status: Order status (e.g pending, completed)
+
+#### order_products
+- id (PRIMARY KEY): Unique identifier for order-product relationship
+- order_id: ForeignKey linking order-product to specific order
+- product_id: ForeignKey linking order-product to specific product
+- quantity: Quantity of product ordered (defaults to 1 if not specified)
 
 # Product API
 
